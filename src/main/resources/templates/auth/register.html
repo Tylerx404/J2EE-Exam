@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký tài khoản bệnh nhân</title>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body>
+<main class="auth-shell">
+    <section class="auth-card">
+        <p class="eyebrow">Patient Registration</p>
+        <h1>Đăng ký tài khoản</h1>
+        <p class="subtitle">Tạo tài khoản bệnh nhân để đăng nhập và đặt lịch khám.</p>
+
+        <form class="auth-form" th:action="@{/register}" th:object="${patientForm}" method="post">
+            <div class="field">
+                <label for="username">Username</label>
+                <input id="username" type="text" th:field="*{username}" placeholder="Nhập username">
+                <p class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Lỗi username</p>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input id="password" type="password" th:field="*{password}" placeholder="Nhập password">
+                <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Lỗi password</p>
+            </div>
+
+            <div class="field">
+                <label for="email">Email</label>
+                <input id="email" type="email" th:field="*{email}" placeholder="name@example.com">
+                <p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Lỗi email</p>
+            </div>
+
+            <button class="primary-button" type="submit">Đăng ký</button>
+        </form>
+
+        <p class="footer-link">Đã có tài khoản? <a th:href="@{/login}">Đăng nhập</a></p>
+    </section>
+</main>
+</body>
+</html>

@@ -21,20 +21,34 @@ public class HomeController {
         this.doctorRepository = doctorRepository;
     }
 
-    @GetMapping({"/", "/home"})
-    public String home(@RequestParam(defaultValue = "0") int page, Model model) {
-        long totalDoctors = doctorRepository.count();
+    @GetMapping({"/", "/home", "/courses"})
+    public String home(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "") String keyword,
+        Model model
+    ) {
+        String normalizedKeyword = keyword == null ? "" : keyword.trim();
+        int currentPage = Math.max(page, 0);
+        PageRequest pageRequest = PageRequest.of(currentPage, PAGE_SIZE, Sort.by(Sort.Direction.ASC, "id"));
+        Page<Doctor> doctorPage = normalizedKeyword.isBlank()
+            ? doctorRepository.findAll(pageRequest)
+            : doctorRepository.findByNameContainingIgnoreCase(normalizedKeyword, pageRequest);
+        long totalDoctors = doctorPage.getTotalElements();
         int lastPage = totalDoctors == 0 ? 0 : (int) Math.ceil((double) totalDoctors / PAGE_SIZE) - 1;
-        int currentPage = Math.min(Math.max(page, 0), lastPage);
-        Page<Doctor> doctorPage = doctorRepository.findAll(
-            PageRequest.of(currentPage, PAGE_SIZE, Sort.by(Sort.Direction.ASC, "id"))
-        );
+        if (currentPage > lastPage) {
+            currentPage = lastPage;
+            pageRequest = PageRequest.of(currentPage, PAGE_SIZE, Sort.by(Sort.Direction.ASC, "id"));
+            doctorPage = normalizedKeyword.isBlank()
+                ? doctorRepository.findAll(pageRequest)
+                : doctorRepository.findByNameContainingIgnoreCase(normalizedKeyword, pageRequest);
+        }
 
         model.addAttribute("doctorPage", doctorPage);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("totalPages", doctorPage.getTotalPages());
         model.addAttribute("previousPage", Math.max(currentPage - 1, 0));
         model.addAttribute("nextPage", currentPage + 1);
+        model.addAttribute("keyword", normalizedKeyword);
 
         return "home";
     }

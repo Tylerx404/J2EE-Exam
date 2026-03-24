@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt lịch khám</title>
+    <link rel="stylesheet" th:href="@{/css/appointment.css}">
+</head>
+<body>
+<main class="appointment-shell">
+    <section class="appointment-card">
+        <div class="doctor-summary">
+            <img th:src="${doctor.image}" th:alt="${doctor.name}">
+            <div>
+                <p class="eyebrow">Appointment Booking</p>
+                <h1>Đặt lịch khám</h1>
+                <h2 th:text="${doctor.name}">BS. Mẫu</h2>
+                <p th:text="${doctor.specialty}">Nội khoa</p>
+                <p>Khoa: <strong th:text="${doctor.department.name}">Nội tổng quát</strong></p>
+            </div>
+        </div>
+
+        <form class="appointment-form"
+              th:action="@{/enroll/doctors/{id}(id=${doctor.id})}"
+              th:object="${appointmentForm}"
+              method="post">
+            <div class="field">
+                <label for="appointmentDate">Ngày khám</label>
+                <input id="appointmentDate" type="date" th:field="*{appointmentDate}">
+                <p class="field-error" th:if="${#fields.hasErrors('appointmentDate')}" th:errors="*{appointmentDate}">
+                    Lỗi ngày khám
+                </p>
+            </div>
+
+            <div class="form-actions">
+                <a class="secondary-button" th:href="@{/home}">Quay lại</a>
+                <button class="primary-button" type="submit">Xác nhận đặt lịch</button>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

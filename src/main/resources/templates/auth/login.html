@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body>
+<main class="auth-shell">
+    <section class="auth-card">
+        <p class="eyebrow">Account Login</p>
+        <h1>Đăng nhập</h1>
+        <p class="subtitle">Sử dụng username và password để truy cập hệ thống clinic.</p>
+
+        <section class="info-message" th:if="${successMessage}">
+            <p th:text="${successMessage}">Đăng ký thành công.</p>
+        </section>
+
+        <section class="error-message" th:if="${hasError}">
+            <p>Sai username hoặc password.</p>
+        </section>
+
+        <section class="info-message" th:if="${loggedOut}">
+            <p>Bạn đã đăng xuất thành công.</p>
+        </section>
+
+        <form class="auth-form" th:action="@{/login}" method="post">
+            <div class="field">
+                <label for="username">Username</label>
+                <input id="username" type="text" name="username" placeholder="Nhập username">
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" placeholder="Nhập password">
+            </div>
+
+            <button class="primary-button" type="submit">Đăng nhập</button>
+        </form>
+
+        <p class="demo-note">Tài khoản mẫu:
+            <strong>admin / Admin@123</strong>,
+            <strong>patient / Patient@123</strong>
+        </p>
+        <p class="footer-link">Chưa có tài khoản? <a th:href="@{/register}">Đăng ký ngay</a></p>
+    </section>
+</main>
+</body>
+</html>

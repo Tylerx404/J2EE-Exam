@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Appointments</title>
+    <link rel="stylesheet" th:href="@{/css/appointment.css}">
+</head>
+<body>
+<main class="appointment-shell">
+    <section class="appointment-card">
+        <div class="card-head">
+            <div>
+                <p class="eyebrow">Patient Area</p>
+                <h1>My Appointments</h1>
+                <p class="subtitle">Danh sách các lịch khám bạn đã đăng ký.</p>
+            </div>
+            <div class="head-actions">
+                <a class="secondary-button" th:href="@{/home}">Về trang home</a>
+            </div>
+        </div>
+
+        <section class="success-message" th:if="${successMessage}">
+            <p th:text="${successMessage}">Đặt lịch thành công.</p>
+        </section>
+
+        <section th:if="${!#lists.isEmpty(appointments)}" class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>Tên bác sĩ</th>
+                    <th>Ngày khám</th>
+                    <th>Khoa</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="appointment : ${appointments}">
+                    <td th:text="${appointment.doctor.name}">BS. Mẫu</td>
+                    <td th:text="${appointment.appointmentDate}">2026-03-24</td>
+                    <td th:text="${appointment.doctor.department.name}">Nội tổng quát</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="empty-state" th:if="${#lists.isEmpty(appointments)}">
+            <h2>Bạn chưa có lịch khám nào</h2>
+            <p>Hãy chọn bác sĩ phù hợp và đặt lịch ngay từ trang chủ.</p>
+            <a class="primary-button" th:href="@{/home}">Chọn bác sĩ</a>
+        </section>
+    </section>
+</main>
+</body>
+</html>

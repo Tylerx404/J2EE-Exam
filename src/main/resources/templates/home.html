@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +8,29 @@
 </head>
 <body>
 <main class="page-shell">
+    <header class="topbar">
+        <a class="brand" th:href="@{/home}">Clinic Appointment</a>
+        <nav class="topbar-nav">
+            <a th:href="@{/courses}">Courses</a>
+            <a sec:authorize="hasRole('PATIENT')" th:href="@{/enroll/my-appointments}">My Appointments</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/doctors}">Admin</a>
+            <a sec:authorize="isAnonymous()" th:href="@{/login}">Login</a>
+            <a sec:authorize="isAnonymous()" th:href="@{/register}">Register</a>
+            <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+                <button class="logout-button" type="submit">Logout</button>
+            </form>
+        </nav>
+    </header>
+
     <section class="hero">
         <div class="hero-copy">
             <p class="eyebrow">Clinic Appointment Application</p>
             <h1>Danh sách bác sĩ</h1>
             <p class="subtitle">
                 Chọn bác sĩ phù hợp theo chuyên khoa và khoa khám để chuẩn bị cho lịch hẹn của bạn.
+            </p>
+            <p class="login-hint" sec:authorize="isAuthenticated()">
+                Xin chào, <strong sec:authentication="name">user</strong>.
             </p>
         </div>
         <div class="hero-metric">
@@ -22,13 +39,25 @@
         </div>
     </section>
 
-    <section class="admin-entry">
+    <section class="flash-message" th:if="${param.logout}">
+        <p>Đăng xuất thành công.</p>
+    </section>
+
+    <section class="admin-entry" sec:authorize="hasRole('ADMIN')">
         <div>
             <p class="admin-entry-label">Dành cho ADMIN</p>
             <h2>Quản lý thông tin bác sĩ</h2>
             <p>Thêm mới, cập nhật hoặc xóa bác sĩ trong khu vực quản trị hệ thống.</p>
         </div>
         <a class="admin-entry-button" th:href="@{/admin/doctors}">Mở CRUD bác sĩ</a>
+    </section>
+
+    <section class="search-panel">
+        <form class="search-form" th:action="@{/home}" method="get">
+            <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm theo tên bác sĩ">
+            <button type="submit">Tìm kiếm</button>
+        </form>
+        <a class="clear-search" th:href="@{/home}" th:if="${!#strings.isEmpty(keyword)}">Xóa bộ lọc</a>
     </section>
 
     <section class="doctor-grid" th:if="${!doctorPage.isEmpty()}">
@@ -44,33 +73,47 @@
                     <span>Khoa</span>
                     <strong th:text="${doctor.department.name}">Nội tổng quát</strong>
                 </p>
+                <a class="book-button"
+                   sec:authorize="hasRole('PATIENT')"
+                   th:href="@{/enroll/doctors/{id}(id=${doctor.id})}">
+                    Đặt lịch
+                </a>
+                <a class="login-to-book"
+                   sec:authorize="isAnonymous()"
+                   th:href="@{/login}">
+                    Đăng nhập để đặt lịch
+                </a>
             </div>
         </article>
     </section>
 
     <section class="empty-state" th:if="${doctorPage.isEmpty()}">
-        <h2>Chưa có bác sĩ nào trong hệ thống</h2>
-        <p>Hãy thêm dữ liệu bác sĩ vào cơ sở dữ liệu để hiển thị tại trang home.</p>
+        <h2 th:text="${#strings.isEmpty(keyword)} ? 'Chưa có bác sĩ nào trong hệ thống' : 'Không tìm thấy bác sĩ phù hợp'">
+            Chưa có bác sĩ nào trong hệ thống
+        </h2>
+        <p th:text="${#strings.isEmpty(keyword)} ? 'Hãy thêm dữ liệu bác sĩ vào cơ sở dữ liệu để hiển thị tại trang home.' : 'Thử tìm kiếm bằng từ khóa khác.'">
+            Hãy thêm dữ liệu bác sĩ vào cơ sở dữ liệu để hiển thị tại trang home.
+        </p>
     </section>
 
     <nav class="pagination" th:if="${totalPages > 0}">
         <a class="page-link"
            th:classappend="${!doctorPage.hasPrevious()} ? ' disabled'"
-           th:href="@{/(page=${previousPage})}">
+           th:href="@{/home(page=${previousPage},keyword=${keyword})}">
             Trước
         </a>
 
         <a class="page-number"
            th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
            th:classappend="${pageNumber == currentPage} ? ' active'"
-           th:href="@{/(page=${pageNumber})}"
+           th:href="@{/home(page=${pageNumber},keyword=${keyword})}"
            th:text="${pageNumber + 1}">
             1
         </a>
 
         <a class="page-link"
            th:classappend="${!doctorPage.hasNext()} ? ' disabled'"
-           th:href="@{/(page=${nextPage})}">
+           th:href="@{/home(page=${nextPage},keyword=${keyword})}">
             Sau
         </a>
     </nav>
