@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic Appointment Application</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+<main class="page-shell">
+    <section class="hero">
+        <div class="hero-copy">
+            <p class="eyebrow">Clinic Appointment Application</p>
+            <h1>Danh sách bác sĩ</h1>
+            <p class="subtitle">
+                Chọn bác sĩ phù hợp theo chuyên khoa và khoa khám để chuẩn bị cho lịch hẹn của bạn.
+            </p>
+        </div>
+        <div class="hero-metric">
+            <span>Tổng số bác sĩ</span>
+            <strong th:text="${doctorPage.totalElements}">0</strong>
+        </div>
+    </section>
+
+    <section class="doctor-grid" th:if="${!doctorPage.isEmpty()}">
+        <article class="doctor-card" th:each="doctor : ${doctorPage.content}">
+            <img class="doctor-image" th:src="${doctor.image}" th:alt="${doctor.name}">
+            <div class="doctor-content">
+                <h2 th:text="${doctor.name}">BS. Mẫu</h2>
+                <p>
+                    <span>Chuyên khoa</span>
+                    <strong th:text="${doctor.specialty}">Nội khoa</strong>
+                </p>
+                <p>
+                    <span>Khoa</span>
+                    <strong th:text="${doctor.department.name}">Nội tổng quát</strong>
+                </p>
+            </div>
+        </article>
+    </section>
+
+    <section class="empty-state" th:if="${doctorPage.isEmpty()}">
+        <h2>Chưa có bác sĩ nào trong hệ thống</h2>
+        <p>Hãy thêm dữ liệu bác sĩ vào cơ sở dữ liệu để hiển thị tại trang home.</p>
+    </section>
+
+    <nav class="pagination" th:if="${totalPages > 0}">
+        <a class="page-link"
+           th:classappend="${!doctorPage.hasPrevious()} ? ' disabled'"
+           th:href="@{/(page=${previousPage})}">
+            Trước
+        </a>
+
+        <a class="page-number"
+           th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+           th:classappend="${pageNumber == currentPage} ? ' active'"
+           th:href="@{/(page=${pageNumber})}"
+           th:text="${pageNumber + 1}">
+            1
+        </a>
+
+        <a class="page-link"
+           th:classappend="${!doctorPage.hasNext()} ? ' disabled'"
+           th:href="@{/(page=${nextPage})}">
+            Sau
+        </a>
+    </nav>
+</main>
+</body>
+</html>
