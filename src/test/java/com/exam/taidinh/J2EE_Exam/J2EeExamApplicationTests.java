@@ -99,6 +99,13 @@ class J2EeExamApplicationTests {
     }
 
     @Test
+    void loginPageShouldShowGoogleLoginLinkWhenConfigured() throws Exception {
+        mockMvc.perform(get("/login"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString("/oauth2/authorization/google")));
+    }
+
+    @Test
     void adminPagesShouldRedirectToLoginWhenAnonymous() throws Exception {
         mockMvc.perform(get("/admin/doctors"))
             .andExpect(status().is3xxRedirection());
@@ -203,6 +210,17 @@ class J2EeExamApplicationTests {
         mockMvc.perform(get("/enroll/my-appointments"))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("My Appointments")));
+    }
+
+    @Test
+    void ajaxSearchFragmentShouldReturnMatchingDoctorWithoutFullPageReload() throws Exception {
+        String doctorName = "BS. Ajax " + System.nanoTime();
+        Department department = ensureDepartment();
+        doctorRepository.save(new Doctor(doctorName, "/images/doctor-placeholder.svg", "Ajax Specialty", department));
+
+        mockMvc.perform(get("/home/search-fragment").param("keyword", "Ajax"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString(doctorName)));
     }
 
     private Department ensureDepartment() {

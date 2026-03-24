@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clinic Appointment Application</title>
     <link rel="stylesheet" th:href="@{/css/home.css}">
+    <script th:src="@{/js/home-search.js}" defer></script>
 </head>
 <body>
 <main class="page-shell">
@@ -53,70 +54,14 @@
     </section>
 
     <section class="search-panel">
-        <form class="search-form" th:action="@{/home}" method="get">
+        <form class="search-form" id="doctor-search-form" th:action="@{/home}" data-ajax-url="/home/search-fragment" method="get">
             <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm theo tên bác sĩ">
             <button type="submit">Tìm kiếm</button>
         </form>
         <a class="clear-search" th:href="@{/home}" th:if="${!#strings.isEmpty(keyword)}">Xóa bộ lọc</a>
     </section>
 
-    <section class="doctor-grid" th:if="${!doctorPage.isEmpty()}">
-        <article class="doctor-card" th:each="doctor : ${doctorPage.content}">
-            <img class="doctor-image" th:src="${doctor.image}" th:alt="${doctor.name}">
-            <div class="doctor-content">
-                <h2 th:text="${doctor.name}">BS. Mẫu</h2>
-                <p>
-                    <span>Chuyên khoa</span>
-                    <strong th:text="${doctor.specialty}">Nội khoa</strong>
-                </p>
-                <p>
-                    <span>Khoa</span>
-                    <strong th:text="${doctor.department.name}">Nội tổng quát</strong>
-                </p>
-                <a class="book-button"
-                   sec:authorize="hasRole('PATIENT')"
-                   th:href="@{/enroll/doctors/{id}(id=${doctor.id})}">
-                    Đặt lịch
-                </a>
-                <a class="login-to-book"
-                   sec:authorize="isAnonymous()"
-                   th:href="@{/login}">
-                    Đăng nhập để đặt lịch
-                </a>
-            </div>
-        </article>
-    </section>
-
-    <section class="empty-state" th:if="${doctorPage.isEmpty()}">
-        <h2 th:text="${#strings.isEmpty(keyword)} ? 'Chưa có bác sĩ nào trong hệ thống' : 'Không tìm thấy bác sĩ phù hợp'">
-            Chưa có bác sĩ nào trong hệ thống
-        </h2>
-        <p th:text="${#strings.isEmpty(keyword)} ? 'Hãy thêm dữ liệu bác sĩ vào cơ sở dữ liệu để hiển thị tại trang home.' : 'Thử tìm kiếm bằng từ khóa khác.'">
-            Hãy thêm dữ liệu bác sĩ vào cơ sở dữ liệu để hiển thị tại trang home.
-        </p>
-    </section>
-
-    <nav class="pagination" th:if="${totalPages > 0}">
-        <a class="page-link"
-           th:classappend="${!doctorPage.hasPrevious()} ? ' disabled'"
-           th:href="@{/home(page=${previousPage},keyword=${keyword})}">
-            Trước
-        </a>
-
-        <a class="page-number"
-           th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
-           th:classappend="${pageNumber == currentPage} ? ' active'"
-           th:href="@{/home(page=${pageNumber},keyword=${keyword})}"
-           th:text="${pageNumber + 1}">
-            1
-        </a>
-
-        <a class="page-link"
-           th:classappend="${!doctorPage.hasNext()} ? ' disabled'"
-           th:href="@{/home(page=${nextPage},keyword=${keyword})}">
-            Sau
-        </a>
-    </nav>
+    <section id="doctor-results" th:replace="~{fragments/doctor-results :: results}"></section>
 </main>
 </body>
 </html>

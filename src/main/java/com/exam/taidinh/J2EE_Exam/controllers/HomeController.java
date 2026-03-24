@@ -27,6 +27,21 @@ public class HomeController {
         @RequestParam(defaultValue = "") String keyword,
         Model model
     ) {
+        populateDoctorPage(page, keyword, model);
+        return "home";
+    }
+
+    @GetMapping("/home/search-fragment")
+    public String searchFragment(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "") String keyword,
+        Model model
+    ) {
+        populateDoctorPage(page, keyword, model);
+        return "fragments/doctor-results :: results";
+    }
+
+    private void populateDoctorPage(int page, String keyword, Model model) {
         String normalizedKeyword = keyword == null ? "" : keyword.trim();
         int currentPage = Math.max(page, 0);
         PageRequest pageRequest = PageRequest.of(currentPage, PAGE_SIZE, Sort.by(Sort.Direction.ASC, "id"));
@@ -49,7 +64,5 @@ public class HomeController {
         model.addAttribute("previousPage", Math.max(currentPage - 1, 0));
         model.addAttribute("nextPage", currentPage + 1);
         model.addAttribute("keyword", normalizedKeyword);
-
-        return "home";
     }
 }

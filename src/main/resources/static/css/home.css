@@ -219,6 +219,14 @@ body {
     cursor: pointer;
 }
 
+#doctor-results {
+    transition: opacity 0.2s ease;
+}
+
+#doctor-results.is-loading {
+    opacity: 0.45;
+}
+
 .clear-search,
 .login-to-book {
     display: inline-block;

@@ -6,6 +6,7 @@ import com.exam.taidinh.J2EE_Exam.models.Role;
 import com.exam.taidinh.J2EE_Exam.repositories.PatientRepository;
 import com.exam.taidinh.J2EE_Exam.repositories.RoleRepository;
 import jakarta.validation.Valid;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,15 +25,18 @@ public class AuthController {
     private final PatientRepository patientRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ClientRegistrationRepository clientRegistrationRepository;
 
     public AuthController(
         PatientRepository patientRepository,
         RoleRepository roleRepository,
-        PasswordEncoder passwordEncoder
+        PasswordEncoder passwordEncoder,
+        ClientRegistrationRepository clientRegistrationRepository
     ) {
         this.patientRepository = patientRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.clientRegistrationRepository = clientRegistrationRepository;
     }
 
     @GetMapping("/register")
@@ -80,6 +84,7 @@ public class AuthController {
     ) {
         model.addAttribute("hasError", error != null);
         model.addAttribute("loggedOut", logout != null);
+        model.addAttribute("googleLoginEnabled", clientRegistrationRepository.findByRegistrationId("google") != null);
         return "auth/login";
     }
 }

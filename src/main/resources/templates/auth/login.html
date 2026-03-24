@@ -39,6 +39,15 @@
             <button class="primary-button" type="submit">Đăng nhập</button>
         </form>
 
+        <div class="oauth-panel">
+            <a class="google-button" th:if="${googleLoginEnabled}" th:href="@{/oauth2/authorization/google}">
+                Đăng nhập với Google
+            </a>
+            <p class="oauth-note" th:unless="${googleLoginEnabled}">
+                Cấu hình `app.oauth.google.client-id` và `app.oauth.google.client-secret` để bật Google Login.
+            </p>
+        </div>
+
         <p class="demo-note">Tài khoản mẫu:
             <strong>admin / Admin@123</strong>,
             <strong>patient / Patient@123</strong>
