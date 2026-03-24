@@ -22,6 +22,15 @@
         </div>
     </section>
 
+    <section class="admin-entry">
+        <div>
+            <p class="admin-entry-label">Dành cho ADMIN</p>
+            <h2>Quản lý thông tin bác sĩ</h2>
+            <p>Thêm mới, cập nhật hoặc xóa bác sĩ trong khu vực quản trị hệ thống.</p>
+        </div>
+        <a class="admin-entry-button" th:href="@{/admin/doctors}">Mở CRUD bác sĩ</a>
+    </section>
+
     <section class="doctor-grid" th:if="${!doctorPage.isEmpty()}">
         <article class="doctor-card" th:each="doctor : ${doctorPage.content}">
             <img class="doctor-image" th:src="${doctor.image}" th:alt="${doctor.name}">

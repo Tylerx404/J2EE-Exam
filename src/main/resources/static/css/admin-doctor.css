@@ -1,0 +1,263 @@
+:root {
+    --bg: #eef2ea;
+    --panel: rgba(255, 255, 255, 0.9);
+    --text: #18261e;
+    --muted: #65756c;
+    --line: rgba(24, 38, 30, 0.12);
+    --primary: #146c43;
+    --primary-dark: #0e4e31;
+    --danger: #b34135;
+    --danger-dark: #8d3128;
+    --shadow: 0 20px 44px rgba(24, 38, 30, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(circle at top right, rgba(20, 108, 67, 0.12), transparent 28%),
+        linear-gradient(180deg, #f8faf7 0%, var(--bg) 100%);
+}
+
+.admin-shell {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 40px 0 56px;
+}
+
+.admin-hero,
+.table-card,
+.form-card,
+.message-card,
+.empty-state {
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.admin-hero {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-end;
+    padding: 28px 30px;
+}
+
+.admin-hero.compact {
+    align-items: center;
+}
+
+.eyebrow {
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.admin-hero h1 {
+    margin: 0;
+    font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.subtitle {
+    margin: 12px 0 0;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 640px;
+}
+
+.hero-actions,
+.form-actions,
+.action-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.primary-button,
+.secondary-button,
+.edit-link,
+.delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+}
+
+.primary-button {
+    background: var(--primary);
+    color: #fff;
+}
+
+.primary-button:hover {
+    background: var(--primary-dark);
+}
+
+.secondary-button,
+.edit-link {
+    background: #fff;
+    color: var(--text);
+    border-color: var(--line);
+}
+
+.delete-button {
+    background: #fff3f1;
+    color: var(--danger);
+    border-color: rgba(179, 65, 53, 0.18);
+}
+
+.delete-button:hover {
+    background: var(--danger);
+    color: #fff;
+}
+
+.message-card {
+    margin-top: 20px;
+    padding: 16px 20px;
+    color: var(--primary-dark);
+    font-weight: 600;
+}
+
+.table-card {
+    margin-top: 24px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background: rgba(20, 108, 67, 0.06);
+    font-size: 0.95rem;
+}
+
+tbody tr:hover {
+    background: rgba(20, 108, 67, 0.04);
+}
+
+.table-image {
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    object-fit: cover;
+    background: #edf5ef;
+}
+
+.empty-state {
+    margin-top: 24px;
+    padding: 42px 28px;
+    text-align: center;
+}
+
+.empty-state p {
+    color: var(--muted);
+    margin: 10px 0 24px;
+}
+
+.form-card {
+    margin-top: 24px;
+    padding: 28px;
+}
+
+.doctor-form {
+    display: grid;
+    gap: 18px;
+}
+
+.field {
+    display: grid;
+    gap: 8px;
+}
+
+.field label {
+    font-weight: 700;
+}
+
+.field input,
+.field select {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    font: inherit;
+    color: var(--text);
+    background: #fff;
+}
+
+.field-error {
+    margin: 0;
+    color: var(--danger);
+    font-size: 0.92rem;
+}
+
+.preview-card {
+    display: grid;
+    gap: 12px;
+    padding: 18px;
+    border-radius: 20px;
+    border: 1px dashed var(--line);
+    background: rgba(20, 108, 67, 0.03);
+}
+
+.preview-card p {
+    margin: 0;
+    font-weight: 700;
+}
+
+.preview-card img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 20px;
+    background: #edf5ef;
+}
+
+@media (max-width: 900px) {
+    .admin-shell {
+        width: min(100% - 24px, 1180px);
+        padding-top: 24px;
+    }
+
+    .admin-hero,
+    .hero-actions,
+    .action-group,
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    th,
+    td {
+        padding: 14px 16px;
+    }
+
+    .table-image {
+        width: 56px;
+        height: 56px;
+    }
+}

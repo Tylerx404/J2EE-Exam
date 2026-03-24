@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý bác sĩ</title>
+    <link rel="stylesheet" th:href="@{/css/admin-doctor.css}">
+</head>
+<body>
+<main class="admin-shell">
+    <section class="admin-hero">
+        <div>
+            <p class="eyebrow">Admin Panel</p>
+            <h1>Quản lý bác sĩ</h1>
+            <p class="subtitle">Thêm, cập nhật và xóa thông tin bác sĩ trong hệ thống clinic.</p>
+        </div>
+        <div class="hero-actions">
+            <a class="secondary-button" th:href="@{/}">Về trang home</a>
+            <a class="primary-button" th:href="@{/admin/doctors/create}">Thêm bác sĩ</a>
+        </div>
+    </section>
+
+    <section class="message-card" th:if="${successMessage}">
+        <p th:text="${successMessage}">Thao tác thành công.</p>
+    </section>
+
+    <section class="table-card" th:if="${!#lists.isEmpty(doctors)}">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Hình ảnh</th>
+                <th>Tên bác sĩ</th>
+                <th>Chuyên khoa</th>
+                <th>Khoa</th>
+                <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="doctor : ${doctors}">
+                <td th:text="${doctor.id}">1</td>
+                <td>
+                    <img class="table-image" th:src="${doctor.image}" th:alt="${doctor.name}">
+                </td>
+                <td th:text="${doctor.name}">BS. Mẫu</td>
+                <td th:text="${doctor.specialty}">Nội khoa</td>
+                <td th:text="${doctor.department.name}">Nội tổng quát</td>
+                <td>
+                    <div class="action-group">
+                        <a class="edit-link" th:href="@{/admin/doctors/{id}/edit(id=${doctor.id})}">Sửa</a>
+                        <form th:action="@{/admin/doctors/{id}/delete(id=${doctor.id})}" method="post">
+                            <button class="delete-button" type="submit"
+                                    onclick="return confirm('Bạn có chắc muốn xóa bác sĩ này?')">
+                                Xóa
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="empty-state" th:if="${#lists.isEmpty(doctors)}">
+        <h2>Chưa có bác sĩ nào</h2>
+        <p>Bắt đầu bằng cách thêm một bác sĩ mới cho hệ thống.</p>
+        <a class="primary-button" th:href="@{/admin/doctors/create}">Tạo bác sĩ đầu tiên</a>
+    </section>
+</main>
+</body>
+</html>

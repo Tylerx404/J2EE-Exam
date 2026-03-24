@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${createMode} ? 'Thêm bác sĩ' : 'Cập nhật bác sĩ'">Bác sĩ</title>
+    <link rel="stylesheet" th:href="@{/css/admin-doctor.css}">
+</head>
+<body>
+<main class="admin-shell">
+    <section class="admin-hero compact">
+        <div>
+            <p class="eyebrow">Admin Panel</p>
+            <h1 th:text="${createMode} ? 'Thêm bác sĩ' : 'Cập nhật bác sĩ'">Thêm bác sĩ</h1>
+            <p class="subtitle">Điền đầy đủ thông tin bác sĩ để hiển thị trên hệ thống đặt lịch.</p>
+        </div>
+        <div class="hero-actions">
+            <a class="secondary-button" th:href="@{/admin/doctors}">Quay lại danh sách</a>
+        </div>
+    </section>
+
+    <section class="form-card">
+        <form class="doctor-form"
+              th:object="${doctorForm}"
+              th:action="${createMode} ? @{/admin/doctors} : @{/admin/doctors/{id}(id=${doctorId})}"
+              method="post">
+            <div class="field">
+                <label for="name">Tên bác sĩ</label>
+                <input id="name" type="text" th:field="*{name}" placeholder="Nhập tên bác sĩ">
+                <p class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Lỗi tên</p>
+            </div>
+
+            <div class="field">
+                <label for="specialty">Chuyên khoa</label>
+                <input id="specialty" type="text" th:field="*{specialty}" placeholder="Ví dụ: Nội tổng quát">
+                <p class="field-error" th:if="${#fields.hasErrors('specialty')}" th:errors="*{specialty}">Lỗi chuyên khoa</p>
+            </div>
+
+            <div class="field">
+                <label for="departmentId">Khoa</label>
+                <select id="departmentId" th:field="*{departmentId}">
+                    <option value="">-- Chọn khoa --</option>
+                    <option th:each="department : ${departments}"
+                            th:value="${department.id}"
+                            th:text="${department.name}">
+                        Nội tổng quát
+                    </option>
+                </select>
+                <p class="field-error" th:if="${#fields.hasErrors('departmentId')}" th:errors="*{departmentId}">Lỗi khoa</p>
+            </div>
+
+            <div class="field">
+                <label for="image">Đường dẫn hình ảnh</label>
+                <input id="image" type="text" th:field="*{image}" placeholder="/images/doctor-placeholder.svg">
+                <p class="field-error" th:if="${#fields.hasErrors('image')}" th:errors="*{image}">Lỗi hình ảnh</p>
+            </div>
+
+            <div class="preview-card">
+                <p>Xem trước hình ảnh</p>
+                <img th:src="*{image}" alt="Preview">
+            </div>
+
+            <div class="form-actions">
+                <a class="secondary-button" th:href="@{/admin/doctors}">Hủy</a>
+                <button class="primary-button" type="submit"
+                        th:text="${createMode} ? 'Lưu bác sĩ' : 'Cập nhật bác sĩ'">
+                    Lưu bác sĩ
+                </button>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

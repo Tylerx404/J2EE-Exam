@@ -84,6 +84,48 @@ body {
     font-size: 2.4rem;
 }
 
+.admin-entry {
+    margin-top: 24px;
+    padding: 24px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: var(--shadow);
+}
+
+.admin-entry-label {
+    margin: 0 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.admin-entry h2 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.admin-entry p:last-child {
+    margin: 8px 0 0;
+    color: var(--muted);
+}
+
+.admin-entry-button {
+    white-space: nowrap;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+}
+
 .doctor-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -187,6 +229,12 @@ body {
 
     .hero {
         padding: 24px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .admin-entry {
+        padding: 20px;
         flex-direction: column;
         align-items: flex-start;
     }
